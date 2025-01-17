@@ -1,0 +1,26 @@
+services:
+  ollamaapp:
+    build: .
+    volumes:
+      - ./app:/app  # Sincroniza o diretório 'app' local com o diretório '/app' no container
+      - ./data:/app/data  # Sincroniza o diretório 'data' local com o diretório '/app/data' no container
+      - ollama_data:/root/.ollama
+    ports:
+      - "8000:8000"  # Exemplo de mapeamento de portas, se necessário
+      - "5000:5000"
+    environment:
+      - SOME_ENV_VAR=value  # Variáveis de ambiente, se necessário
+      - OLLAMA_HOME=/root/.ollama  # Definir a pasta de instalação do Ollama
+    command: ["bash", "-c", "ollama serve"]
+    stdin_open: true   # Permite interação com o terminal
+    tty: true         # Mantém o terminal aberto
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  ollama_data:  # Volume para persistir dados do Ollama (como modelos)
