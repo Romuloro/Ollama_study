@@ -2,29 +2,36 @@ from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_ollama import ChatOllama
 from langchain_core.output_parsers import StrOutputParser
 
-from services import text, vectorstore, chain
+from services import text, vectorstore, chain, image
 from infrastructure import prompt
 
-dir_path = 'data'
-MODEL = 'mistral'
+dir_path_pdf = './data/pdf/'
+dir_path_image = './data/image/'
+MODEL = 'llama3.2-vision'
 
-loader = PyPDFDirectoryLoader(dir_path)
+loader_pdf = PyPDFDirectoryLoader(dir_path_pdf)
 
-def main(question):
-    data = text.create_text_chunks(loader)
-    vectorstore_ = vectorstore.create_vectorstore(data)
+def main(question, image_path):
+    try:
+        data_pdf = text.create_text_chunks(loader_pdf)
+        data = data_pdf #+ data_image
 
-    retriever = vectorstore_.as_retriever()
-    model = ChatOllama(model=MODEL, temperature=0)
-    parser = StrOutputParser()
+        vectorstore_ = vectorstore.create_vectorstore(data, MODEL)
 
-    prompt_ = prompt.create_prompt()
+        retriever = vectorstore_.as_retriever()
+        model = ChatOllama(model=MODEL, temperature=0)
+        parser = StrOutputParser()
 
-    chain_ = chain.create_chain(retriever, prompt_, model, parser)
+        prompt_ = prompt.create_prompt()
 
-    print(f"Answer: {chain_.invoke({'question': question})}")
+        chain_ = chain.create_chain(retriever, prompt_, model, parser)
+
+        print(f"Answer: {chain_.invoke({'question': question, 'image_paths': image_path})}")
+    except Exception as e:
+        print(f"Erro ao invocar o modelo: {e}")
 
 
 if __name__ == '__main__':
-    question = "Please, what is the concept of meta-learning?"
-    main(question)
+    question = "Qual é a idade da terra?"
+    image_path = image.load_images_path(dir_path_image)
+    main(question, image_path)
