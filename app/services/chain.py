@@ -5,6 +5,7 @@ def create_chain(retriever, prompt, model, parser):
         {
             "context": itemgetter("question") | retriever,
             "question": itemgetter("question"),
+            "image_paths": itemgetter("image_paths"),
         }
         | prompt
         | model
