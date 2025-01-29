@@ -8,6 +8,7 @@ services:
     ports:
       - "8000:8000"  # Exemplo de mapeamento de portas, se necessário
       - "5000:5000"
+      - "8501:8501"
     environment:
       - SOME_ENV_VAR=value  # Variáveis de ambiente, se necessário
       - OLLAMA_HOME=/root/.ollama  # Definir a pasta de instalação do Ollama
