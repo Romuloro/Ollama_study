@@ -1,4 +1,5 @@
 from langchain.text_splitter import CharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
 from PyPDF2 import PdfReader
 
 
@@ -11,13 +12,13 @@ def create_text_chunks(pdf_docs):
             length_function= len
             )
     
-    text = ""
+    documents = []
 
     for pdf in pdf_docs:
-        loader = PdfReader(pdf)
-        for page in loader.pages:
-            text += page.extract_text()
-
-    data_slipt = text_splitter.split_text(text)
+        loader = PyPDFLoader(pdf)
+        docs = loader.load()
+        documents.extend(docs)
+    
+    data_slipt = text_splitter.split_documents(documents)
 
     return data_slipt
