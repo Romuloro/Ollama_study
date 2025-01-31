@@ -13,6 +13,8 @@ def create_prompt():
     Context: {context}
 
     Question: {question}
+
+    Images: {image_paths}
     """
 
     prompt = PromptTemplate.from_template(template)
