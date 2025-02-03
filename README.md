@@ -19,7 +19,7 @@ Instale o projeto
 ### Faça o clone do projeto
 
 ```bash
-    git clone https://github.com/Romuloro/Ollama_study.git
+git clone https://github.com/Romuloro/Ollama_study.git
 ```
 
 ### Rodar o projeto
@@ -27,13 +27,13 @@ Nesta parte da instalação é nescessário o uso de **docker** e ter instalado 
 No mesmo diretório onde o projeto foi clonado faça os comandos no terminal.
 
 ```bash
-    docker compose up --build
+docker compose up --build
 ```
 
 Sai do container com **Ctrl + C**
 
 ```bash
-    docker compose up -d && docker compose exec ollamaapp /bin/bash
+docker compose up -d && docker compose exec ollamaapp /bin/bash
 ```
 
 Já dentro do container docker rode no seu terminal:
@@ -41,17 +41,17 @@ Já dentro do container docker rode no seu terminal:
 #### GPU com 8 VRAM
 
 ```bash
-    ollama pull llama3.2-vision
+ollama pull llama3.2-vision
 ```
 
 #### GPU com > 8 VRAM
 
 ```bash
-    ollama pull ministral
+ollama pull ministral
 ```
 Além disso modifique a variavel **MODEL** para mistral no arquivo **app.py**
 
 **Finalmente rode o projeto com o comando**
 ```bash
-    streamlit run app.py
+streamlit run app.py --server.port 8777
 ```
